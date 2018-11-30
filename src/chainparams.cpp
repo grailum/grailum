@@ -3,7 +3,6 @@
 // Copyright (c) 2018 The Grailum Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
 #include <chainparams.h>
 
 #include <chainparamsseeds.h>
@@ -72,7 +71,7 @@ public:
         consensus.BIP66Height = 363725; // 00000000000000000379eaa19dce8c9b722d46ae6a57c2f1a988119488b50931
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan = 17 * 60 * 60;
-        consensus.nPowTargetSpacing = 1 * 30;
+        consensus.nPowTargetSpacing = 1 * 30;   // 0.5 minutes
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = false;
         consensus.nRuleChangeActivationThreshold = 1938; // 95% of 2040
@@ -88,8 +87,8 @@ public:
 
         // Deployment of SegWit (BIP141, BIP143, and BIP147)
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].bit = 1;
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1479168000; // November 15th, 2016.
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1510704000; // November 15th, 2017.
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = -1;
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 999999999999ULL;
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");
@@ -109,8 +108,8 @@ public:
         nDefaultPort = 53003;
         nPruneAfterHeight = 100000;
 
-        genesis = CreateGenesisBlock(1543150188, 352075, 0x1e0ffff0, 1, 100 * COIN);
-        
+        genesis = CreateGenesisBlock(1543150188, 352075, 0x1e0ffff0, 1, 100 * COIN);       
+
         consensus.hashGenesisBlock = genesis.GetHash();
         assert(consensus.hashGenesisBlock == uint256S("0x0000084fe23456cb866c3f688aba4e56d287138ae48dbaeb782753f7efd371a8"));
         assert(genesis.hashMerkleRoot == uint256S("0x2c94a0c472340e9a0522f7feb2abaf28185ac311a634b12f41be2ba307fac2f7"));
@@ -121,12 +120,9 @@ public:
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
         // vSeeds.emplace_back("x.x.x.x");
-	vSeeds.emplace_back("54.185.199.89");
-	vSeeds.emplace_back("34.222.230.58");
-	vSeeds.emplace_back("176.31.107.225");
-	vSeeds.emplace_back("94.23.27.169");
-	vSeeds.emplace_back("37.187.155.151");
-	vSeeds.emplace_back("37.187.30.90");
+        vSeeds.emplace_back("54.184.35.179");
+        vSeeds.emplace_back("54.214.94.70");
+        vSeeds.emplace_back("176.31.107.225");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,97);  // prefix: g
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,38);   // prefix: G 
@@ -150,12 +146,12 @@ public:
 
         chainTxData = ChainTxData{
             /* nTime    */ 1543150188,
-            /* nTxCount */ 1,
+    	    /* nTxCount */ 1,
             /* dTxRate  */ 2.4
         };
 
         /* disable fallback fee on mainnet */
-        m_fallback_fee_enabled = false;
+        m_fallback_fee_enabled = true;
     }
 };
 
@@ -401,3 +397,4 @@ void SelectParams(const std::string& network)
     SelectBaseParams(network);
     globalChainParams = CreateChainParams(network);
 }
+
